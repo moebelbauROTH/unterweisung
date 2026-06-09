@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Sicherheitsunterweisung – Möbelbau Roth</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; color: #1a1a1a; font-size: 15px; }
+.app { max-width: 480px; margin: 0 auto; background: #f0f2f5; min-height: 100vh; padding-bottom: 3rem; }
+.header { background: #1F4E79; color: white; padding: 1rem 1.2rem 1.2rem; }
+.header h1 { font-size: 17px; font-weight: bold; }
+.header p { font-size: 12px; opacity: 0.8; margin-top: 2px; margin-bottom: 10px; }
+.progress-bar { background: rgba(255,255,255,0.25); border-radius: 4px; height: 5px; }
+.progress-fill { background: white; height: 5px; border-radius: 4px; transition: width 0.35s; }
+.step { display: none; padding: 1rem 0.9rem 0; }
+.step.active { display: block; }
+.step-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.card { background: white; border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 0.9rem; border: 1px solid #e0e0e0; }
+.card h2 { font-size: 14px; font-weight: bold; color: #1F4E79; margin-bottom: 8px; border-bottom: 1px solid #e8eef4; padding-bottom: 6px; }
+.card h3 { font-size: 13px; font-weight: bold; color: #333; margin: 10px 0 5px; }
+.card ul { padding-left: 1.2rem; }
+.card li { font-size: 13px; color: #333; line-height: 1.75; margin-bottom: 2px; }
+.card ol { padding-left: 1.3rem; }
+.card ol li { font-size: 13px; color: #333; line-height: 1.75; }
+.warn { background: #FFF3E0; border-left: 3px solid #E65100; padding: 8px 10px; margin: 8px 0; font-size: 12px; color: #4E342E; border-radius: 0 6px 6px 0; line-height: 1.5; }
+.danger { background: #FFEBEE; border-left: 3px solid #C62828; padding: 8px 10px; margin: 8px 0; font-size: 12px; color: #B71C1C; border-radius: 0 6px 6px 0; font-weight: bold; line-height: 1.5; }
+.ok { background: #E8F5E9; border-left: 3px solid #2E7D32; padding: 8px 10px; margin: 8px 0; font-size: 12px; color: #1B5E20; border-radius: 0 6px 6px 0; line-height: 1.5; }
+.rule { background: #EDE7F6; border-left: 3px solid #4527A0; padding: 8px 10px; margin: 8px 0; font-size: 12px; color: #311B92; border-radius: 0 6px 6px 0; line-height: 1.5; font-weight: bold; }
+.section-tag { display: inline-block; font-size: 10px; background: #E3EEF8; color: #1F4E79; padding: 2px 7px; border-radius: 99px; margin-bottom: 6px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; }
+.q-block { background: white; border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 0.9rem; border: 1px solid #e0e0e0; }
+.q-counter { font-size: 11px; color: #999; margin-bottom: 6px; }
+.q-text { font-size: 14px; font-weight: bold; color: #1a1a1a; margin-bottom: 12px; line-height: 1.5; }
+.option { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 7px; cursor: pointer; font-size: 13px; color: #1a1a1a; line-height: 1.4; -webkit-tap-highlight-color: transparent; }
+.option:active { background: #f5f5f5; }
+.option.sel-ok { border-color: #2E7D32; background: #E8F5E9; color: #1B5E20; }
+.option.sel-nok { border-color: #C62828; background: #FFEBEE; color: #B71C1C; }
+.option.show-ok { border-color: #2E7D32; background: #E8F5E9; color: #1B5E20; }
+.opt-dot { width: 20px; min-width: 20px; height: 20px; border-radius: 50%; border: 2px solid #bbb; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; margin-top: 1px; flex-shrink: 0; }
+.fb { font-size: 12px; padding: 7px 10px; border-radius: 6px; margin-top: 6px; line-height: 1.5; }
+.fb.ok { background: #E8F5E9; color: #2E7D32; }
+.fb.nok { background: #FFEBEE; color: #C62828; }
+.score-card { text-align: center; padding: 1.5rem 1rem; background: white; border-radius: 10px; border: 1px solid #e0e0e0; margin-bottom: 0.9rem; }
+.score-num { font-size: 54px; font-weight: bold; line-height: 1; }
+.score-num.p { color: #2E7D32; }
+.score-num.f { color: #C62828; }
+.score-sub { font-size: 13px; color: #777; margin-top: 6px; }
+.badge { display: inline-block; font-size: 12px; padding: 4px 14px; border-radius: 99px; font-weight: bold; margin-top: 10px; }
+.bp { background: #E8F5E9; color: #2E7D32; }
+.bf { background: #FFEBEE; color: #C62828; }
+.info-row { display: flex; justify-content: space-between; align-items: flex-start; font-size: 13px; color: #666; padding: 5px 0; border-bottom: 1px solid #f0f0f0; gap: 8px; }
+.info-row:last-of-type { border-bottom: none; }
+.info-val { font-weight: bold; color: #1a1a1a; text-align: right; }
+canvas#sig-canvas { display: block; width: 100%; height: 120px; border: 2px dashed #aaa; border-radius: 8px; background: #fafafa; cursor: crosshair; touch-action: none; }
+.btn { width: 100%; padding: 13px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 6px; }
+.btn-p { background: #1F4E79; color: white; }
+.btn-p:active { opacity: 0.85; }
+.btn-s { background: white; color: #444; border: 1px solid #ccc; font-size: 13px; }
+.report-box { background: #f0f4f8; border-radius: 8px; padding: 1rem; font-family: monospace; font-size: 11px; color: #1a1a1a; white-space: pre-wrap; word-break: break-word; margin-bottom: 1rem; max-height: 340px; overflow-y: auto; border: 1px solid #cfd8e3; }
+select, input[type=text] { width: 100%; padding: 11px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: white; color: #1a1a1a; margin-bottom: 10px; -webkit-appearance: none; }
+.confirm-hint { font-size: 12px; color: #777; line-height: 1.6; margin-top: 10px; }
+
+/* iOS Safari fixes */
+input[type=text], select, textarea {
+  font-size: 16px !important; /* prevent iOS auto-zoom on focus */
+  -webkit-appearance: none;
+  border-radius: 8px;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+.btn {
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+.option {
+  -webkit-tap-highlight-color: rgba(0,0,0,0.05);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* iOS rubber-band scroll fix for canvas */
+canvas#sig-canvas {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* Fix iOS momentum scrolling for report box */
+.report-box {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+}
+/* Safe area insets for iPhone X+ notch */
+.app {
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
+}
+.header {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+  <h1>Möbelbau Roth</h1>
+  <p>Jährliche Sicherheitsunterweisung · BGHM · Grundlage: DGUV 109-606</p>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<!-- SCHRITT 1 -->
+<div class="step active" id="step-name">
+  <div class="step-label">Schritt 1 von 4 · Anmeldung</div>
+  <div class="card">
+    <h2>Wer bist du?</h2>
+    <p style="font-size:13px;color:#666;margin-bottom:14px">Bitte auswählen oder Namen eingeben.</p>
+    <select id="ma-select">
+      <option value="">— Mitarbeiter auswählen —</option>
+      <option>Philip</option><option>Basti</option><option>Lennox</option>
+      <option>Moritz</option><option>Vincent</option><option>Alexandru</option>
+    </select>
+    <input type="text" id="ma-custom" placeholder="oder freier Name..." />
+    <button class="btn btn-p" onclick="startApp()">Unterweisung starten →</button>
+  </div>
+</div>
+
+<!-- SCHRITT 2: UNTERWEISUNG -->
+<div class="step" id="step-info">
+  <div class="step-label">Schritt 2 von 4 · Sicherheitsunterweisung lesen</div>
+
+  <div class="card">
+    <div class="section-tag">Grundsätze · DGUV 109-606</div>
+    <h2>1. Allgemeine Grundsätze an Holzbearbeitungsmaschinen</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:8px">Arbeiten an Holzbearbeitungsmaschinen gilt als besonders gefährlich — das Werkstück wird häufig frei von Hand an schnell rotierenden Werkzeugen geführt. (DGUV 109-606)</p>
+    <div class="rule">📐 Grundregel: Maximale Werkzeugverdeckung — Schutzeinrichtung immer so nah wie möglich am Werkstück einstellen. Nie weiter öffnen als unbedingt nötig.</div>
+    <h3>Die 4 Hauptgefährdungen an stationären Maschinen</h3>
+    <ul>
+      <li><strong>Schnittgefährdung</strong> — direktes Berühren des laufenden Werkzeugs</li>
+      <li><strong>Einzugsgefahr</strong> — Werkstück, Kleidung, Schmuck, Handschuhe werden erfasst</li>
+      <li><strong>Rückschlag</strong> — Werkstück wird plötzlich und mit großer Kraft zurückgeschleudert</li>
+      <li><strong>Herausgeschleuderte Teile</strong> — Abschnitte, Splitter, Werkzeugteile fliegen weg</li>
+    </ul>
+    <div class="rule">📐 Rückschlag-Grundregel: Nie hinter dem laufenden Werkzeug stehen — immer seitlich zur Wurfrichtung positionieren. Gilt auch für Umstehende.</div>
+    <h3>Sicherer Stand und Körperhaltung</h3>
+    <ul>
+      <li>Stabiler, schulterbreiter Stand mit leicht gebeugten Knien</li>
+      <li>Standfläche rutschsicher halten — Späne und Staub sofort entfernen</li>
+      <li>Nie in den Gefahrbereich vor dem Werkzeug lehnen oder beugen</li>
+      <li>Ausreichend Bewegungsraum sicherstellen — keine Hindernisse hinter dem Rücken</li>
+      <li>Lange Werkstücke abstützen — nie freischwebend halten</li>
+    </ul>
+    <h3>Kleidung und Schmuck</h3>
+    <ul>
+      <li>Enganliegende Kleidung an allen Maschinen — keine weiten Ärmel, kein offenes Hemd</li>
+      <li>Kein Schmuck — Ringe, Ketten, Armbänder können eingezogen werden</li>
+      <li>Lange Haare zusammenbinden oder unter Kappe</li>
+    </ul>
+    <div class="danger">🚫 HANDSCHUHE-VERBOT an allen Maschinen mit rotierenden Werkzeugen: Formatkreissäge, Abrichthobel, Dickenhobel, Tischfräse, Breitbandschleifer, Kantenschleifer, Bohrmaschine — Handschuhe können eingezogen werden und führen zu schwersten Verletzungen bis zum Handverlust. (DGUV 2.2.2)</div>
+    <h3>Pflichtcheck vor jeder Maschine</h3>
+    <ul>
+      <li>Schutzeinrichtung vorhanden und auf Werkstückhöhe eingestellt?</li>
+      <li>Absaugung eingeschaltet?</li>
+      <li>Not-Aus bekannt und erreichbar?</li>
+      <li>Werkzeug scharf, rissfrei, für das Material geeignet?</li>
+      <li>Hilfsmittel (Schiebestock, Anschlag, Niederhalter) griffbereit?</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Formatkreissäge kappa 550 · DGUV 3.1.1</div>
+    <h2>2. Formatkreissäge kappa 550 (Format4)</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:6px">Häufigste schwere Unfälle in Schreinereien. Hauptursachen: unsichere Werkstückführung, fehlender/falsch eingestellter Spaltkeil, falsch eingestellte Schutzhaube.</p>
+    <h3>Pflichtausstattung — immer montiert</h3>
+    <ul>
+      <li>Spaltkeil: max. 8 mm Abstand zum Sägeblatt — nach jedem Blattwechsel prüfen</li>
+      <li>Obere Schutzhaube mit Absauganschluss — immer auf Werkstückhöhe eingestellt</li>
+      <li>Schiebestock / Sägehilfe Fritz-und-Franz — griffbereit an der Maschine</li>
+      <li>Not-Aus und Endschalter — Funktion bekannt, Standort bekannt</li>
+      <li>Absaugung VOR Arbeitsbeginn einschalten</li>
+    </ul>
+    <div class="rule">📐 Schutzhaube immer auf Werkstückhöhe — nie höher als nötig. Maximale Verdeckung ist Pflicht.</div>
+    <h3>Betriebsregeln</h3>
+    <ul>
+      <li>Hände beim Vorschub nie im Bereich der Schnittebene auf das Werkstück legen</li>
+      <li>Schmale Werkstücke: Schiebestock oder Fritz-und-Franz — kein Freihändeschneiden</li>
+      <li>Parallelanschlag bei schmalen Werkstücken auf niedere Führungsfläche umstellen</li>
+      <li>Abschnittreste nur mit Schiebestock entfernen — nie mit der Hand</li>
+      <li>Erst nach vollständigem Stillstand des Sägeblatts abgreifen</li>
+      <li>Nur scharfe, rissfreie Kreissägeblätter — HSS-Blätter verboten</li>
+      <li>Gefahrbereich vor der Maschine: während des Schnitts keine Umstehenden</li>
+    </ul>
+    <div class="danger">🚫 Keine Handschuhe. Kein Freihändeschneiden. Nie hinter dem Sägeblatt stehen — Rückschlaggefahr.</div>
+    <div class="ok">✓ Gehörschutz Pflicht — > 85 dB(A)</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Kappsäge · DGUV 3.1.4</div>
+    <h2>3. Unterflur-Kappsäge (gelegentlicher Einsatz)</h2>
+    <ul>
+      <li>Nur nach Einweisung durch Guido — vor jedem gelegentlichen Einsatz kurze Überprüfung</li>
+      <li>Sägeblattverdeckung in Ausgangsstellung vollständig geschlossen prüfen</li>
+      <li>Säge nach jedem Schnitt in Ausgangsstellung zurückführen und einrasten</li>
+      <li>Werkstück fest am Anschlag anlegen, Niederhalter verwenden</li>
+      <li>Nie in die Schnittebene greifen bei laufendem Sägeblatt</li>
+      <li>Abschnittreste erst nach vollständigem Stillstand entfernen</li>
+      <li>Nur ein Werkstück je Schnitt — mehrere aufeinanderliegende können Sägeblatt blockieren</li>
+      <li>Bei Blockade: ausschalten, Netzstecker ziehen, dann erst Werkstück lösen</li>
+    </ul>
+    <div class="ok">✓ Gehörschutz · Absaugung · Bei Splitterflug: Schutzbrille</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Abricht-Dickenhobel · DGUV 3.1.9/3.1.10</div>
+    <h2>4. Abricht-Dickenhobel (kombiniert)</h2>
+    <ul>
+      <li>Messerwellenschutz — immer geschlossen, nie überbrücken</li>
+      <li>Not-Aus und motorischer Schnellstopp — Standort und Funktion bekannt</li>
+      <li>Werkstück immer mit Schiebestock über die Messerwelle führen</li>
+      <li>Zuführ- und Abführseite nie gleichzeitig durch dieselbe Person bedienen</li>
+      <li>Holz vor Beginn prüfen: keine Nägel, metallische Einschlüsse, lose Äste</li>
+      <li>Mindestlänge und Mindestdicke beachten (Herstellervorgabe)</li>
+      <li>Absaugung eingeschaltet</li>
+    </ul>
+    <div class="rule">📐 Messerwelle läuft nach Abschalten noch nach — kaum sichtbar, aber noch gefährlich. Schiebestock-Pflicht ist absolut.</div>
+    <div class="danger">🚫 Keine Handschuhe — Einzugsgefahr durch Messerwelle.</div>
+    <div class="ok">✓ Gehörschutz Pflicht</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Tischfräse · DGUV 3.1.7/3.1.8</div>
+    <h2>5. Tischfräse</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:6px">Besonders hohes Risiko schwerer Handverletzungen. Häufigste schwere Unfälle beim Probe- und Einsetzfräsen. (DGUV 3.1.7)</p>
+    <h3>Werkzeugauswahl</h3>
+    <ul>
+      <li>Nur MAN-Werkzeuge (Kennzeichnung MAN oder DGUV Test) bei Handvorschub — MEC verboten</li>
+      <li>Mindest-Fräserdorndurchmesser 30 mm</li>
+      <li>Drehzahl aus Schnittgeschwindigkeitstabelle: zu niedrig = Rückschlaggefahr, zu hoch = Bruchgefahr</li>
+      <li>Spannflächen vor Montage reinigen — Schmutz führt zu Werkzeugbruch</li>
+    </ul>
+    <h3>Betrieb</h3>
+    <ul>
+      <li>Werkzeugverdeckung auch beim Probefräsen — keine Ausnahme</li>
+      <li>Tischöffnung durch Einlegeringe so weit wie möglich schließen</li>
+      <li>Beim Einsetzfräsen: Rückschlagsicherung verwenden</li>
+      <li>Kurze Werkstücke: Spannlade verwenden</li>
+      <li>Werkzeugeinstellung nur bei stillstehender Maschine</li>
+      <li>Absaugung über und unter dem Tisch</li>
+    </ul>
+    <div class="danger">🚫 Keine Handschuhe. Keine MEC-Werkzeuge bei Handvorschub. Tischfräse nur nach Einweisung durch Guido.</div>
+    <div class="ok">✓ Gehörschutz Pflicht > 85 dB(A)</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Schleifmaschinen · DGUV 3.2.1/3.2.2</div>
+    <h2>6. Breitbandschleifmaschine und Kantenschleifmaschine</h2>
+    <h3>Breitbandschleifmaschine</h3>
+    <ul>
+      <li>Absaugung VOR Arbeitsbeginn einschalten</li>
+      <li>Not-Aus und Balken-Not-Aus am Einzugswalzenbereich — Standort bekannt</li>
+      <li>Schleifband vor Arbeitsbeginn auf Risse prüfen — gerissenes Band sofort wechseln</li>
+      <li>Kein Schmuck, keine losen Kleidungsteile, Ärmel aufgekrempelt — Einzugsgefahr</li>
+      <li>Mindestmaße des Werkstücks beachten</li>
+    </ul>
+    <h3>Kantenschleifmaschine</h3>
+    <ul>
+      <li>Schutzabdeckung hinten (vertikale Walze) immer montiert</li>
+      <li>Absaugung eingeschaltet</li>
+      <li>Werkstück fest und kontrolliert führen</li>
+    </ul>
+    <div class="danger">🚫 Keine Handschuhe an beiden Schleifmaschinen — Einzugsgefahr.</div>
+    <div class="ok">✓ Atemschutz 3M 6223M A2P3 · Gehörschutz Peltor/Optime</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Handmaschinen · DGUV 3.3</div>
+    <h2>7. Handmaschinen und Elektrowerkzeuge</h2>
+    <ul>
+      <li><strong>Handkreis-/Tauchsäge:</strong> Führungsschiene verwenden, erst ablegen nach vollständigem Stillstand des Sägeblatts</li>
+      <li><strong>Winkelschleifer:</strong> Schutzbrille (Honeywell XC) immer, Schutzhaube immer montiert, Scheibe auf Risse prüfen</li>
+      <li><strong>Handoberfräse:</strong> Nur MAN-Werkzeuge, Führungsschiene oder Anlaufring verwenden</li>
+      <li><strong>Handhobel:</strong> Werkstück fest einspannen, nach Gebrauch Messerseite weghaben</li>
+      <li><strong>Stichsäge:</strong> gute Auflage, Sägeblatt nicht berühren bis Stillstand</li>
+      <li><strong>Rotex / Deros Mirka / Schwingschleifer:</strong> Atemschutz bei Innenarbeiten</li>
+      <li><strong>Druckluftnagler:</strong> nie auf Personen richten, Finger weg vom Abzug beim Positionieren</li>
+      <li><strong>Bohrmaschine/Schrauber:</strong> Werkstück fixieren — kein Festhalten von Hand beim Bohren, Aufwickelgefahr</li>
+    </ul>
+    <div class="warn">⚠ Vor Werkzeugwechsel, Reinigung und Wartung: Netzstecker ziehen oder Akku entnehmen — immer, ohne Ausnahme.</div>
+    <div class="warn">⚠ CNC Acctek AKM 1325: noch nicht BG-genehmigt — keine eigenständige Bedienung ohne ausdrückliche Freigabe durch Guido.</div>
+    <div class="ok">✓ Elektroprüfung aller Maschinen fortlaufend. FI-Schutzschalter in jedem Montagefahrzeug.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">PSA · DGUV 2.2.2</div>
+    <h2>8. Persönliche Schutzausrüstung (PSA)</h2>
+    <h3>Gehörschutz — Tragepflicht ab 85 dB(A)</h3>
+    <ul>
+      <li>Peltor X3A oder Optime 1/2/3 (mehrfach vorhanden)</li>
+      <li>Pflicht bei: Formatkreissäge, Abrichthobel, Tischfräse, Breitbandschleifer, Winkelschleifer</li>
+      <li>Auch bei kurzen Arbeiten — Lärm wirkt sofort und kumulativ</li>
+    </ul>
+    <h3>Atemschutz</h3>
+    <ul>
+      <li>3M 6223M A2P3 mit Aktivkohlefilter — ein Set pro Mitarbeiter, Filterwechsel bei Guido</li>
+      <li>A2 = Lösemitteldämpfe · P3 = höchste Feinstaubstufe</li>
+      <li>Pflicht bei: Schleifarbeiten, Lackieren, Beizen, Ölen, Lösemitteln, Filterelementwechsel</li>
+      <li>Hartholzstaub (Eiche, Buche): krebserzeugend — Atemschutz immer, kein Ermessen</li>
+    </ul>
+    <h3>Schutzbrille</h3>
+    <ul>
+      <li>Honeywell XC im Winkelschleifer-Koffer</li>
+      <li>Pflicht bei: Winkelschleifer, Fräsen, Splitterflug, Überkopfarbeiten</li>
+    </ul>
+    <h3>Handschuhe — nur erlaubte Bereiche</h3>
+    <ul>
+      <li>Nitrilhandschuhe Einweg: Lösemittel, Lacke, Klebstoffe, Öle, Beizen</li>
+      <li>Gummihandschuhe: Nassarbeiten, konzentrierte Gefahrstoffe</li>
+      <li>Körperschutzanzug (2× blau Unisize XL): Pflicht bei Spritzarbeiten</li>
+      <li>Beim Sägeblattwechsel an Kappsäge: Handschuhe erlaubt (Schnittverletzungsschutz)</li>
+    </ul>
+    <div class="warn">⚠ Sicherheitsschuhe S3 — Pflicht in Werkstatt und auf jeder Montage. Keine Ausnahme.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Holzstaub · DGUV 2.2.3</div>
+    <h2>9. Holzstaub — unsichtbare Gefahr</h2>
+    <ul>
+      <li>Hartholzstaub (Eiche, Buche): Nasenschleimhautkrebs möglich — krebserzeugend nach TRGS 906</li>
+      <li>Alle Hölzer: Atemwegserkrankungen, Allergien, Hautkrankheiten</li>
+      <li>Holzstaub ist brennbar — bildet mit Luft explosionsfähige Gemische</li>
+      <li>Grenzwert: 2 mg/m³ als Schichtmittelwert (einatembarer Holzstaub)</li>
+      <li>Absaugung an stationären Maschinen: immer angeschlossen und eingeschaltet vor Arbeitsbeginn</li>
+      <li>Entstauber/Industriestaubsauger: mindestens Staubklasse M</li>
+      <li>Abblasen und trockenes Fegen von Holzstaub verboten — immer absaugen</li>
+      <li>Schäden an Absaugschläuchen: sofort bei stillstehender Maschine beheben</li>
+    </ul>
+    <div class="warn">⚠ Schleifarbeiten sind besonders staubintensiv — abgesaugten Handschleifklotz verwenden wo möglich.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Lackiererei · DGUV 3.4.6</div>
+    <h2>10. Lackiererei und Oberflächenbearbeitung</h2>
+    <ul>
+      <li>3M 6223M A2P3 — Pflicht bei allen Spritz-, Beiz-, Öl- und Lösemittelarbeiten</li>
+      <li>Körperschutzanzug und Nitrilhandschuhe bei Spritzarbeiten</li>
+      <li>Lüftung einschalten BEVOR Lösemittel geöffnet werden</li>
+      <li>Gefahrstoffe im Metallschrank im Lackierraum lagern — nur dort</li>
+      <li>Sicherheitsdatenblätter liegen aus — bei Fragen lesen</li>
+      <li>Potentialausgleich an Lösemittelkanistern verwenden — verhindert statische Entladung</li>
+    </ul>
+    <div class="danger">🔥 Selbstentzündungsgefahr: Öl- und lösemittelgetränkte Lappen IMMER sofort in den verschlossenen Metallbehälter. Niemals offen liegenlassen.</div>
+    <div class="warn">⚠ Keine Getränke, Lebensmittel, offene Flammen, kein Rauchen im Lackierbereich.</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Lager · DGUV 3.4.3</div>
+    <h2>11. Lager, Montage und Fahrzeuge</h2>
+    <h3>Plattenlagerung</h3>
+    <ul>
+      <li>Platten an der Wand mit Gurten gesichert — täglich prüfen, sofort nachspannen wenn locker</li>
+      <li>Ab 25 kg oder bei Kippgefahr: zu zweit oder Hilfsmittel</li>
+      <li>Gefahrstoffe nur im Metallschrank im Lackierraum</li>
+    </ul>
+    <h3>Montage</h3>
+    <ul>
+      <li>FI-Schutzschalter in jedem Fahrzeug — auf jeder Baustelle verwenden</li>
+      <li>Ladungssicherung: Material immer sichern — auch auf kurzen Strecken</li>
+      <li>Anlegeleiter: 1:4-Regel (ca. 75°), Füße sichern, nie überstrecken</li>
+      <li>Abgase: Fahrzeuge nie in geschlossenen Räumen laufen lassen — CO-Vergiftungsgefahr</li>
+      <li>Elektroarbeiten nur durch Elektriker</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">Alle Bereiche</div>
+    <h2>12. Ordnung, Fluchtwege, Erste Hilfe</h2>
+    <ul>
+      <li>Fluchtwege und Notausgänge immer vollständig freihalten — auch kurzes Blockieren verboten</li>
+      <li>Feuerlöscher: Standort bekannt, Druckanzeige prüfen</li>
+      <li>Verbandkasten: Standort bekannt — jede Verletzung, auch kleinste, sofort im Meldeblock eintragen</li>
+      <li>Meldeblock: Datum, Verletzung, Hergang notieren — gesetzliche Meldefristen</li>
+      <li>Werkstatt sauber verlassen: absaugen, Maschinen aus, Gefahrstoffe verschlossen</li>
+    </ul>
+    <div class="ok">✓ Notruf: 112 | Ersthelfer: Guido Roth und Philip</div>
+  </div>
+
+  <div class="card">
+    <div class="section-tag">BGHM Grundsatz</div>
+    <h2>13. Maßnahmenhierarchie — TOP-Prinzip</h2>
+    <p style="font-size:12px;color:#555;margin-bottom:8px">Gefahren immer direkt an der Quelle beseitigen. Schutzmaßnahmen zwingend in dieser Reihenfolge:</p>
+    <ol>
+      <li><strong>T</strong>echnische Maßnahmen — Schutzvorrichtungen, Absaugung, Not-Aus</li>
+      <li><strong>O</strong>rganisatorische Maßnahmen — Unterweisung, Betriebsanweisung, Wartungsplan</li>
+      <li><strong>P</strong>ersonenbezogene Maßnahmen (PSA) — erst wenn T und O ausgeschöpft sind</li>
+    </ol>
+    <div class="warn">⚠ PSA ist das letzte Mittel — nicht der erste Griff. Prioritäten Möbelbau Roth: 1. Verletzung · 2. Staub · 3. Lärm · 4. Rückschlag</div>
+  </div>
+
+  <button class="btn btn-p" onclick="goQuiz()">Ich habe alles gelesen → Weiter zum Test</button>
+</div>
+
+<!-- SCHRITT 3: QUIZ — alle 40 Fragen, Reihenfolge gemischt, Antworten gemischt -->
+<div class="step" id="step-quiz">
+  <div class="step-label">Schritt 3 von 4 · Wissenstest — 40 Pflichtfragen</div>
+  <div id="quiz-container"></div>
+  <button class="btn btn-p" id="quiz-next-btn" style="display:none" onclick="finishQuiz()">Auswertung anzeigen →</button>
+</div>
+
+<!-- SCHRITT 4 -->
+<div class="step" id="step-sign">
+  <div class="step-label">Schritt 4 von 4 · Unterschrift und Abschluss</div>
+  <div class="score-card" id="score-display"></div>
+  <div class="card">
+    <h2>Bestätigung</h2>
+    <div class="info-row"><span>Mitarbeiter</span><span class="info-val" id="confirm-name">—</span></div>
+    <div class="info-row"><span>Datum</span><span class="info-val" id="confirm-date">—</span></div>
+    <div class="info-row"><span>Unterweisung</span><span class="info-val">Jährliche Sicherheitsunterweisung</span></div>
+    <div class="info-row"><span>Grundlage</span><span class="info-val">DGUV Regel 109-606</span></div>
+    <div class="info-row"><span>Fragen</span><span class="info-val">40 Pflichtfragen (alle)</span></div>
+    <div class="info-row"><span>Aussteller</span><span class="info-val">Möbelbau Roth, Guido Roth</span></div>
+    <p class="confirm-hint">Hiermit bestätige ich, dass ich die Sicherheitsunterweisung vollständig gelesen, verstanden und alle Pflichtfragen nach bestem Wissen beantwortet habe. Ich kenne die Gefährdungen an meinem Arbeitsplatz und die erforderlichen Schutzmaßnahmen.</p>
+  </div>
+  <div class="card">
+    <h2>Unterschrift</h2>
+    <p style="font-size:12px;color:#777;margin-bottom:10px">Mit dem Finger unterschreiben:</p>
+    <canvas id="sig-canvas"></canvas>
+    <button class="btn btn-s" onclick="clearSig()" style="margin-top:8px">Unterschrift löschen</button>
+  </div>
+  <button class="btn btn-p" onclick="generateReport()">Report erstellen →</button>
+</div>
+
+<!-- REPORT -->
+<div class="step" id="step-report">
+  <div class="step-label">Report</div>
+  <div class="card">
+    <h2>&#10003; Unterweisung abgeschlossen</h2>
+    <p style="font-size:13px;color:#555;margin-bottom:12px">Text kopieren und per WhatsApp an Guido senden:</p>
+    <div class="report-box" id="report-text"></div>
+    <button class="btn btn-p" onclick="copyReport()">Text kopieren</button>
+    <button class="btn btn-s" onclick="openWhatsApp()">In WhatsApp öffnen</button>
+    <button class="btn btn-s" onclick="resetApp()">Neue Unterweisung starten</button>
+  </div>
+</div>
+</div>
+
+<script>
+var ALL_QUESTIONS = [
+  // GRUNDSÄTZE (8)
+  {cat:"Grundsätze", q:"Was ist die Grundregel zur maximalen Werkzeugverdeckung?", opts:["Schutzvorrichtung so weit wie möglich öffnen für bessere Sicht","Schutzvorrichtung immer so nah wie möglich am Werkstück — nie weiter öffnen als unbedingt nötig","Schutzvorrichtung nur bei langen Arbeiten benutzen","Schutzvorrichtung ist Empfehlung"], correct:1, expl:"Maximale Werkzeugverdeckung ist Grundprinzip der DGUV 109-606: Schutzeinrichtung immer auf Werkstückhöhe, nie höher als nötig. Je enger die Verdeckung, desto geringer das Verletzungsrisiko."},
+  {cat:"Grundsätze", q:"Was sind die 4 Hauptgefährdungen an stationären Holzbearbeitungsmaschinen?", opts:["Lärm, Staub, Vibration, Ausrutschen","Schnittgefährdung, Einzugsgefahr, Rückschlag, herausgeschleuderte Teile","Stromschlag, Feuer, Staub, Lärm","Rückenschmerzen, Lärm, Staub, Schnitt"], correct:1, expl:"Laut DGUV 109-606 Abschnitt 2.2.2: Schnittgefährdung, Einzugsgefahr, Werkstückrückschlag und herausgeschleuderte Teile. Besonders betroffen: Hände und Finger der Bedienperson."},
+  {cat:"Grundsätze", q:"Warum sind Handschuhe an Kreissäge, Abrichthobel, Tischfräse und Bohrmaschine verboten?", opts:["Sie sind zu teuer","Sie können von rotierenden Teilen eingezogen werden — Einzugsgefahr bis zum Handverlust","Das ist nur eine Empfehlung","Sie schränken die Beweglichkeit ein"], correct:1, expl:"Handschuhe können von Messerwellen, Sägeblättern, Fräsern und Bohrern erfasst werden. Das führt zu schwersten Verletzungen. Verboten laut DGUV 2.2.2. An der Bohrmaschine erhöhte Aufwickelgefahr."},
+  {cat:"Grundsätze", q:"Was ist die Rückschlag-Grundregel an allen stationären Maschinen?", opts:["Nur bei der Kreissäge relevant","Nie hinter dem laufenden Werkzeug stehen — immer seitlich zur Wurfrichtung, gilt auch für Umstehende","Nur bei nassen Hölzern","Rückschlag passiert nur Anfängern"], correct:1, expl:"Rückschlag: Werkstück wird mit großer Kraft zurückgeworfen. Immer seitlich positionieren — nie in der Wurfrichtung stehen. Gilt für die Bedienperson und alle Umstehenden. (DGUV 109-606)"},
+  {cat:"Grundsätze", q:"Welche Kleidungsregel gilt an allen Holzbearbeitungsmaschinen?", opts:["Bequeme Kleidung ist ausreichend","Enganliegende Kleidung, kein Schmuck, lange Haare binden — weite Ärmel und offene Hemden verboten","Nur Handschuhe müssen ausgezogen werden","Arbeitskleidung ist optional"], correct:1, expl:"Enganliegende Kleidung Pflicht, kein Schmuck, Haare binden. Weite Ärmel und offene Hemden können in Einzugsbereiche geraten — besonders gefährlich an Breitbandschleifer, Hobelmaschinen und Einzugswalzen."},
+  {cat:"Grundsätze", q:"Was ist das TOP-Prinzip der BGHM und welche Reihenfolge gilt?", opts:["Technik, Ordnung, Praxis","Erst Technische Maßnahmen, dann Organisatorische, dann PSA — PSA ist immer das letzte Mittel","PSA zuerst, dann Technik","Alle Maßnahmen gleichzeitig"], correct:1, expl:"TOP-Prinzip (BGHM): T=Technisch (Schutzvorrichtungen, Absaugung, Not-Aus) → O=Organisatorisch (Unterweisung, Betriebsanweisung, Wartungsplan) → P=Personenbezogen/PSA. PSA ist letztes Mittel, nicht erster Griff."},
+  {cat:"Grundsätze", q:"Was gehört zum Pflichtcheck vor jeder Maschine?", opts:["Nur Werkzeug auf Schärfe prüfen","Schutzeinrichtung auf Werkstückhöhe, Absaugung an, Not-Aus bekannt, Werkzeug rissfrei, Hilfsmittel griffbereit","Nur die Absaugung einschalten","Pflichtcheck ist nicht vorgeschrieben"], correct:1, expl:"Vollständiger Pflichtcheck vor jeder Maschine: Schutzeinrichtung auf Werkstückhöhe eingestellt? Absaugung eingeschaltet? Not-Aus bekannt und erreichbar? Werkzeug scharf/rissfrei/geeignet? Hilfsmittel griffbereit?"},
+  {cat:"Grundsätze", q:"Wie ist die korrekte Körperhaltung beim Arbeiten an stationären Maschinen?", opts:["Nah anlehnen für Kontrolle","Stabiler schulterbreiter Stand, Standfläche rutschsicher, ausreichend Bewegungsraum, nie in Gefahrbereich beugen","Beliebige Haltung — Hauptsache Werkstück im Griff","Immer seitlich zur Maschine stehen"], correct:1, expl:"Stabiler Stand, Knie leicht gebeugt, Standfläche rutschsicher (Späne sofort entfernen), ausreichend Bewegungsraum hinter dem Rücken. Lange Werkstücke abstützen. Nie in den Gefahrbereich vor dem Werkzeug beugen."},
+
+  // KREISSÄGE (5)
+  {cat:"Kreissäge", q:"Was sind die häufigsten Unfallursachen an der Formatkreissäge laut DGUV 3.1.1?", opts:["Zu hohe Schnittgeschwindigkeit und alte Maschinen","Unsichere Werkstückführung, fehlender/falsch eingestellter Spaltkeil, falsch eingestellte Schutzhaube","Zu dünne Sägeblätter","Lärm und Staub"], correct:1, expl:"DGUV 3.1.1: Häufigste Ursachen sind unsichere Werkstückführung, fehlender oder falsch eingestellter Spaltkeil, falsch eingestellte oder nicht benutzte obere Schutzhaube. Dazu: Verlust der Werkstückkontrolle und falsche Anschlageinstellung."},
+  {cat:"Kreissäge", q:"Wie groß ist der maximal erlaubte Abstand zwischen Spaltkeil und Sägeblatt an der kappa 550?", opts:["Abstand ist egal","Maximal 8 mm — muss nach jedem Sägeblattwechsel geprüft werden","Mindestens 2 cm","Nur bei Längsschnitten relevant"], correct:1, expl:"Spaltkeilabstand max. 8 mm zum Kreissägeblatt. Dieser Abstand muss nach jedem Sägeblattwechsel neu geprüft und eingestellt werden. Zu großer Abstand = Spaltkeil wirkungslos = erhöhte Rückschlaggefahr. (DGUV 3.1.1)"},
+  {cat:"Kreissäge", q:"Wie werden schmale Werkstücke an der Formatkreissäge korrekt gesägt?", opts:["Mit Handschuhen für Grip","Mit Schiebestock oder Sägehilfe Fritz-und-Franz — kein Freihändeschneiden, Parallelanschlag auf niedere Führungsfläche","Schnell sägen damit man nicht abrutscht","Zwei Personen — eine hält, eine sägt"], correct:1, expl:"Bei schmalen Werkstücken: Schiebestock oder Sägehilfe Fritz-und-Franz. Parallelanschlag auf niedere Führungsfläche umstellen. Kein Freihändeschneiden. Hände nie in der Schnittebene auf das Werkstück legen. (DGUV 3.1.1)"},
+  {cat:"Kreissäge", q:"Wann und wie werden Abschnittreste aus dem Sägeblattbereich entfernt?", opts:["Sofort nach dem Schnitt mit der Hand","Erst nach vollständigem Stillstand des Sägeblatts, nur mit dem Schiebestock — nie mit der Hand","Mit dem nächsten Werkstück wegschieben","Bei laufendem Sägeblatt schnell weggreifen"], correct:1, expl:"Abschnittreste nur mit dem Schiebestock entfernen. Erst nach vollständigem Stillstand — nachlaufendes Sägeblatt ist kaum sichtbar, aber noch gefährlich schnell. Nie mit der Hand in den Sägeblattbereich greifen."},
+  {cat:"Kreissäge", q:"Was ist bezüglich Sägeblätter an der Formatkreissäge verboten?", opts:["Spezielle Längsschnittblätter","HSS-Kreissägeblätter sind verboten — nur scharfe, rissfreie Blätter vom richtigen Typ","Blätter mit mehr als 60 Zähnen","Blätter unter 250 mm Durchmesser"], correct:1, expl:"HSS-Kreissägeblätter sind für Formatkreissägen verboten. Nur scharfe, rissfreie Blätter verwenden, die für das Material und den Arbeitsgang geeignet sind (Längs- oder Querschnitt, Vollholz oder Platten). (DGUV 3.1.1)"},
+
+  // KAPPSÄGE (3)
+  {cat:"Kappsäge", q:"Was ist bei der Kappsäge nach jedem Schnitt zwingend zu tun?", opts:["Abschnitt sofort mit Hand entfernen","Säge vollständig in Ausgangsstellung zurückführen und einrasten — erst dann Werkstück bewegen","Motor abschalten","Sofort nächsten Schnitt vorbereiten"], correct:1, expl:"Nach jedem Schnitt Säge in Ausgangsstellung zurückführen und einrasten. Erst dann darf das Werkstück bewegt oder Abschnitte entfernt werden. In Ausgangsstellung ist das Sägeblatt vollständig durch die Schutzhaube verdeckt."},
+  {cat:"Kappsäge", q:"Was ist bei einer Blockade des Sägeblatts an der Kappsäge zu tun?", opts:["Maschine weiter laufen lassen und Werkstück ziehen","Maschine sofort ausschalten, Netzstecker ziehen — erst dann verkeiltes Werkstück lösen","Säge zurückziehen bei laufendem Blatt","Einen Kollegen holen der hilft"], correct:1, expl:"Bei Blockade: sofort ausschalten, Netzstecker ziehen. Erst nach vollständigem Stillstand das verklemmte Werkstück lösen. Bei laufendem Sägeblatt kann das Lösen des Werkstücks zu unkontrolliertem Rückschlag führen."},
+  {cat:"Kappsäge", q:"Warum darf man an der Kappsäge nicht mehrere Werkstücke gleichzeitig sägen?", opts:["Dauert zu lange","Mehrere übereinanderliegende Stücke sind nicht sicher einspannbar — Sägeblatt kann blockieren und zurückschlagen","Nur Qualitätsgründe","Schont das Sägeblatt"], correct:1, expl:"Mehrere aufeinanderliegende Werkstücke können nicht sicher eingespannt werden. Das Sägeblatt kann beim Schnitt blockieren und unkontrolliert zurückschlagen. Immer nur ein Werkstück je Schnitt. (DGUV 3.1.4)"},
+
+  // ABRICHTHOBEL (3)
+  {cat:"Abrichthobel", q:"Warum muss das Werkstück am Abrichthobel immer mit dem Schiebestock geführt werden?", opts:["Für bessere Maßgenauigkeit","Die Messerwelle läuft nach Abschalten noch nach — kaum sichtbar aber noch gefährlich, die Hand darf nie direkt darüber geführt werden","Schiebestock ist optional","Nur bei schmalen Werkstücken"], correct:1, expl:"Messerwellen laufen nach dem Abschalten noch mehrere Sekunden nach — kaum sichtbar, aber mit noch gefährlicher Geschwindigkeit. Schiebestock-Pflicht ist absolut. Die Hand darf nie direkt über die Messerwelle geführt werden."},
+  {cat:"Abrichthobel", q:"Was muss vor dem Hobeln am Holz geprüft werden?", opts:["Nur die Holzfeuchte","Keine Nägel, metallische Einschlüsse oder lose Äste — diese können Messerwerkzeuge zerstören und Teile wegschleudern","Nur die Länge","Maschine erkennt das selbst"], correct:1, expl:"Vor dem Hobeln: Holz auf Nägel, Schrauben, metallische Einschlüsse, lose Äste prüfen. Diese zerstören Messer, können Teile wegschleudern und die Maschine beschädigen. Besonders wichtig bei Altholz und unbekannten Holzstücken."},
+  {cat:"Abrichthobel", q:"Was ist beim kombinierten Abricht-Dickenhobel bezüglich der Bedienpersonen zu beachten?", opts:["Beide Seiten können gleichzeitig durch eine Person bedient werden","Zuführ- und Abführseite dürfen nie gleichzeitig durch dieselbe Person bedient werden","Nur Gesellen dürfen die Maschine bedienen","Maschine muss immer zu zweit bedient werden"], correct:1, expl:"Zuführ- und Abführseite des kombinierten Abricht-Dickenhobels dürfen nie gleichzeitig durch dieselbe Person bedient werden. Das würde erfordern, über die laufende Messerwelle zu greifen oder sich gefährlich zu beugen."},
+
+  // TISCHFRÄSE (4)
+  {cat:"Tischfräse", q:"Welche Fräswerkzeuge dürfen an der Tischfräse bei Handvorschub verwendet werden?", opts:["Alle verfügbaren Fräswerkzeuge","Nur Werkzeuge mit Kennzeichnung MAN oder DGUV Test — MEC-Werkzeuge bei Handvorschub verboten","Nur neue Werkzeuge","Alle Werkzeuge über 80 mm Durchmesser"], correct:1, expl:"Bei Handvorschub ausschließlich MAN-Werkzeuge (Kennzeichnung MAN oder DGUV Test). MEC-Werkzeuge haben größere Schneidenüberstände und ein deutlich höheres Rückschlagrisiko bei Handvorschub. (DGUV 3.1.8)"},
+  {cat:"Tischfräse", q:"Was passiert bei zu niedriger Drehzahl an der Tischfräse?", opts:["Das Werkstück wird besser bearbeitet","Erhöhte Rückschlaggefahr — das Werkzeug kann im Holz einhaken","Nur lauter Betrieb","Bessere Schnittqualität"], correct:1, expl:"Zu niedrige Drehzahl an der Tischfräse erhöht die Rückschlaggefahr erheblich — das Werkzeug kann einhaken und das Werkstück wegschleudern. Zu hohe Drehzahl: Bruchgefahr und erhöhter Lärm. Drehzahl aus der Schnittgeschwindigkeitstabelle wählen."},
+  {cat:"Tischfräse", q:"Wann ereignen sich besonders häufig schwere Unfälle an der Tischfräse?", opts:["Beim Routinefräsen langer Werkstücke","Beim Probe- und Einsetzfräsen — besonderes Rückschlagrisiko ohne Rückschlagsicherung","Beim Absaugen","Beim Werkzeugwechsel"], correct:1, expl:"Laut DGUV 3.1.7 ereignen sich besonders häufig schwere Unfälle beim Probe- und Einsetzfräsen. Beim Einsetzfräsen ohne Rückschlagsicherung besteht erhöhte Rückschlaggefahr. Werkzeugverdeckung auch beim Probefräsen — keine Ausnahme."},
+  {cat:"Tischfräse", q:"Was ist beim Werkzeugwechsel an der Tischfräse zu beachten?", opts:["Werkzeug bei laufender Maschine wechseln geht schneller","Werkzeugeinstellung nur bei vollständig stillstehender Maschine und mit Einstellvorrichtung","Werkzeugwechsel ohne Schutzausrüstung","Nur bei abgeschalteter Absaugung"], correct:1, expl:"Werkzeugeinstellung und -wechsel nur bei vollständig stillstehender Maschine. Einstellvorrichtung verwenden. Spannflächen vor Montage reinigen — Verschmutzungen führen zu Werkzeugbruch und können Messerwerfungen verursachen."},
+
+  // SCHLEIFMASCHINEN (3)
+  {cat:"Schleifer", q:"Was muss vor dem Einlegen eines Werkstücks in die Breitbandschleifmaschine geprüft werden?", opts:["Nur ob das Band gespannt ist","Kein Schmuck, keine losen Kleidungsteile, Ärmel aufgekrempelt, Schleifband auf Risse — Einzugsgefahr","Handschuhe anziehen für Grip","Maschine kurz leer laufen lassen reicht"], correct:1, expl:"Einzugsgefahr: Schmuck, offene Hemden, lose Ärmel können von Einzugswalzen erfasst werden. Gerissene Schleifbänder platzen. Beides prüfen. Keine Handschuhe — ebenfalls Einzugsgefahr. Balken-Not-Aus Standort bekannt?"},
+  {cat:"Schleifer", q:"Warum ist Holzstaub beim Schleifen von Eiche und Buche besonders gefährlich?", opts:["Nur wegen Brandgefahr","Hartholzstaub kann Nasenschleimhautkrebs verursachen — krebserzeugend nach TRGS 906","Nur Weichholzstaub ist gefährlich","Holzstaub ist immer gleich gefährlich"], correct:1, expl:"Hartholzstaub (Eiche, Buche) ist krebserzeugend nach TRGS 906 und kann Nasenschleimhautkrebs verursachen. Atemschutz 3M 6223M A2P3 ist bei Schleifarbeiten mit Hartholz zwingend, kein Ermessen."},
+  {cat:"Schleifer", q:"Welcher Atemschutz wird bei Möbelbau Roth für Schleif- und Lackierarbeiten verwendet?", opts:["Einfache FFP1-Maske reicht","3M 6223M A2P3 mit Aktivkohlefilter — A2 gegen Lösemitteldämpfe, P3 gegen Feinstaub","Jede beliebige Maske","Keinen — Lüftung reicht"], correct:1, expl:"3M 6223M A2P3 mit Aktivkohlefilter ist der Betriebsstandard bei Möbelbau Roth. A2 = Schutz vor Lösemitteldämpfen, P3 = höchste Feinstaubstufe. Ein Set pro Mitarbeiter, Filterwechsel bei Guido anfragen."},
+
+  // HANDMASCHINEN (4)
+  {cat:"Handmaschinen", q:"Wann darf die Handkreissäge abgelegt werden?", opts:["Sobald Motor abgeschaltet","Wenn Akku gezogen","Erst wenn Sägeblatt vollständig zum Stillstand — nachlaufendes Blatt ist kaum sichtbar aber noch gefährlich","Nach 3 Sekunden"], correct:2, expl:"Sägeblätter laufen nach dem Abschalten noch mehrere Sekunden nach. Das läuft kaum sichtbar langsam — aber noch mit gefährlicher Geschwindigkeit. Immer auf vollständigen Stillstand warten bevor die Säge abgelegt wird."},
+  {cat:"Handmaschinen", q:"Was ist beim Winkelschleifer immer Pflicht?", opts:["Nur Gehörschutz","Schutzbrille (Honeywell XC), Schutzhaube immer montiert, Scheibe auf Risse geprüft","Nur Handschuhe","Schutzbrille nur bei Überkopf"], correct:1, expl:"Winkelschleifer: Schutzbrille (Honeywell XC) immer, Schutzhaube immer montiert, Scheibe vor Benutzung auf Risse prüfen. Schleifscheiben bei Bruch können Splitter mit extrem hoher Energie schleudern."},
+  {cat:"Handmaschinen", q:"Vor welchen Tätigkeiten muss Netzstecker gezogen oder Akku entnommen werden?", opts:["Nur bei Werkzeugwechsel wenn Maschine heiß","Vor Werkzeugwechsel, Reinigung und Wartung aller Handmaschinen — immer, ohne Ausnahme","Nur bei Reparatur","Nur wenn Maschine defekt ist"], correct:1, expl:"Vor Werkzeugwechsel, Reinigung und Wartung: Netzstecker ziehen oder Akku entnehmen. Unbeabsichtliches Einschalten durch vergessene Schalterposition oder Kurzschluss kann schwere Verletzungen verursachen — gilt für alle Handmaschinen."},
+  {cat:"Handmaschinen", q:"Warum darf man beim Bohren das Werkstück nicht von Hand festhalten?", opts:["Nur Qualitätsgründe","Bohrerbruch und Aufwickelgefahr — bei Verklemmen des Bohrers dreht sich das Werkstück unkontrolliert weg","Nur bei großen Bohrern relevant","Hand weg ist nur eine Empfehlung"], correct:1, expl:"Beim Bohren: Werkstück immer fixieren (Spannzwinge, Schraubstock). Klemmt der Bohrer, dreht sich das Werkstück unkontrolliert weg — Quetsch- und Schnittverletzungen. An der Bohrmaschine sind Handschuhe zusätzlich wegen Aufwickelgefahr verboten."},
+
+  // HOLZSTAUB (4)
+  {cat:"Holzstaub", q:"Wann wird die Absauganlage eingeschaltet?", opts:["Wenn Staub sichtbar wird","Vor Arbeitsbeginn — immer als allererstes, vor dem Einschalten der Maschine","Nach 5 Minuten Arbeit","Nur bei Schleifarbeiten"], correct:1, expl:"Absaugung immer VOR Arbeitsbeginn einschalten. Holzstaub entsteht ab dem ersten Span — nicht erst wenn er sichtbar ist. Lungengängiger Feinstaub unter 10 Mikrometer ist unsichtbar und kumulativ schädigend. (DGUV 2.2.3)"},
+  {cat:"Holzstaub", q:"Wie darf Holzstaub von Maschinen und Arbeitsbereichen entfernt werden?", opts:["Mit Druckluft wegblasen ist schnell und praktisch","Nur durch Absaugen mit Entstauber oder Industriestaubsauger Staubklasse M — Abblasen und trockenes Fegen sind verboten","Mit dem Besen zusammenfegen","Mit dem Lappen abwischen"], correct:1, expl:"Abblasen und trockenes Fegen von Holzstaub sind verboten (DGUV 2.2.3). Abgeblasener Staub verteilt sich in der Luft und wird eingeatmet. Nur Absaugen mit Entstauber oder Industriestaubsauger — mindestens Staubklasse M."},
+  {cat:"Holzstaub", q:"Welchen Grenzwert hat einatembarer Holzstaub in der Luft?", opts:["10 mg/m³ Schichtmittelwert","2 mg/m³ als Schichtmittelwert — wird dieser überschritten ist Atemschutz Pflicht","Kein festgelegter Grenzwert","50 mg/m³"], correct:1, expl:"Grenzwert für einatembaren Holzstaub: 2 mg/m³ als Schichtmittelwert. Bei Tätigkeiten wo mehr zu erwarten ist (z.B. Filterwechsel, intensives Schleifen ohne Absaugung) ist Atemschutz Pflicht. (TRGS 553)"},
+  {cat:"Holzstaub", q:"Was macht Holzstaub zusätzlich zur Gesundheitsgefahr noch gefährlich?", opts:["Holzstaub ist nur gesundheitsgefährlich","Holzstaub ist brennbar und bildet mit Luft explosionsfähige Gemische — auch Brand- und Explosionsgefahr","Nur bei Hartholz explosiv","Nur in großen Mengen relevant"], correct:1, expl:"Holzstaub ist brennbar und bildet mit Luftsauerstoff explosionsfähige Gemische. Das ist der Grund warum Absauganlagen, Entstauber und Silos besonderen Vorschriften unterliegen. Keine offenen Flammen in Staubbereichen. (DGUV 2.2.3)"},
+
+  // LACKIEREREI (4)
+  {cat:"Lackiererei", q:"Du findest nach Ölarbeiten einen getränkten Lappen auf dem Boden. Was tust du sofort?", opts:["Offen liegenlassen — trocknet ab","In den normalen Mülleimer","Sofort in den verschlossenen Metallbehälter im Lackierraum","Draußen an die Luft legen"], correct:2, expl:"Ölgetränkte Lappen können sich durch exotherme Oxidationsreaktion selbst entzünden — ohne externe Wärmequelle. Das ist eine reale Brandgefahr die auch nachts wirkt. Immer sofort in den verschlossenen Metallbehälter."},
+  {cat:"Lackiererei", q:"Wann wird die Lüftung im Lackierraum eingeschaltet?", opts:["Wenn es anfängt zu riechen","Bevor Lösemittel oder Lacke geöffnet werden — Lüftung muss laufen bevor Gebinde geöffnet werden","Lüftung nur bei Spritzarbeiten","Nach der Arbeit zum Entlüften"], correct:1, expl:"Lüftung muss laufen BEVOR die Gebinde geöffnet werden. Lösemitteldämpfe entstehen sofort beim Öffnen. Ohne laufende Lüftung sammeln sie sich zunächst an — Explosions- und Vergiftungsgefahr bereits beim Öffnen."},
+  {cat:"Lackiererei", q:"Was bedeutet der Potentialausgleich an Lösemittelkanistern und warum ist er wichtig?", opts:["Elektrische Erdung der Anlage allgemein","Verhindert statische Aufladung beim Umfüllen — statische Entladung kann Lösemitteldämpfe entzünden","Misst den Füllstand","Nur dekorativ"], correct:1, expl:"Beim Umfüllen von Lösemitteln entsteht statische Ladung. Der Potentialausgleich (Verbindungskabel zwischen Kanistern) verhindert Funkenentladungen in der explosiven Lösemittelatmosphäre. Bei Möbelbau Roth vorhanden und zu verwenden."},
+  {cat:"Lackiererei", q:"Welche vollständige PSA ist bei Spritzarbeiten Pflicht?", opts:["Nur Handschuhe","3M 6223M A2P3 Atemschutz, Körperschutzanzug und Nitrilhandschuhe — alle drei","Nur Atemschutz","Schutzbrille reicht"], correct:1, expl:"Dreifachschutz bei Spritzarbeiten: 3M 6223M A2P3 (schützt vor Lösemitteldämpfen A2 und Partikeln P3), Körperschutzanzug (Haut und Kleidung), Nitrilhandschuhe (Hautkontakt mit Lösemitteln). Alle drei sind Pflicht."},
+
+  // LAGER & MONTAGE (3)
+  {cat:"Montage", q:"Was gilt für den FI-Schutzschalter bei Möbelbau Roth auf der Montage?", opts:["Nur bei Nassarbeiten","FI-Schutzschalter in jedem Fahrzeug — auf jeder Baustelle verwenden, immer","Nur wenn Auftraggeber es verlangt","Nur bei älteren Elektrogeräten"], correct:1, expl:"FI-Schutzschalter (Zwischensteck-FI) ist in jedem Montagefahrzeug von Möbelbau Roth vorhanden und auf jeder Baustelle zu verwenden. Schützt vor tödlichem Stromschlag bei Beschädigung von Kabeln durch Arbeiten auf Baustellen."},
+  {cat:"Montage", q:"Wie wird eine Anlegeleiter korrekt aufgestellt?", opts:["So steil wie möglich für Stabilität","1:4-Regel (ca. 75°): 1 m Abstand zur Wand je 4 m Leiterlänge, Füße sichern, nie überstrecken","Reicht wenn sie irgendwie steht","Nur auf ebenen Flächen nutzbar"], correct:1, expl:"1:4-Regel ergibt ca. 75° Aufstellwinkel. Füße gegen Wegrutschen sichern. Nie seitlich überstrecken — der Kipppunkt liegt näher als man denkt. Lange Leitern von einer zweiten Person sichern lassen. (DGUV 3.5.5)"},
+  {cat:"Lager", q:"Ein Gurt an der Plattenlagerung ist locker. Was ist sofort zu tun?", opts:["Ignorieren — kippt selten","Platten wie gewohnt entnehmen","Gurt sofort nachspannen und bei Bedarf Guido informieren","Warten bis jemand anderes es bemerkt"], correct:2, expl:"Plattenlagersicherung ist aktiv zu halten. Loser Gurt sofort nachspannen. Umkippende Platten sind ein ernstes Verletzungsrisiko — bei großen Formaten lebensgefährlich. Täglich prüfen und sofort handeln."},
+
+  // ALLGEMEIN (5)
+  {cat:"Allgemein", q:"Du hast eine kleine Schnittverletzung am Finger. Was ist zu tun?", opts:["Selbst versorgen und nichts weiter sagen","Nur melden wenn stark blutend","Sofort im Meldeblock eintragen — Datum, Verletzung, Hergang — und Guido informieren","Am nächsten Tag erwähnen"], correct:2, expl:"Jede Verletzung — auch kleinste — muss sofort im Meldeblock dokumentiert werden: Datum, Verletzung, Hergang. Gesetzliche Meldefristen für Arbeitsunfälle. Nachträgliche Einträge sind schwierig und können Probleme bei der BG verursachen."},
+  {cat:"Allgemein", q:"Wer sind die Ersthelfer bei Möbelbau Roth?", opts:["Jeder der helfen will","Nur Guido","Guido Roth und Philip","Basti als Meisterschüler"], correct:2, expl:"Guido Roth und Philip sind die ausgewiesenen Ersthelfer bei Möbelbau Roth. Notruf 112 bei ernsteren Verletzungen — immer sofort, ohne Verzögerung. Betriebsarzt bei Bedarf über Guido."},
+  {cat:"Allgemein", q:"Eine Maschine ist mit 'Defekt – nicht benutzen' gekennzeichnet. Was gilt?", opts:["Kurz benutzen wenn dringend nötig","Zettel ist nur ein Hinweis","Nicht benutzen — Sperrung gilt bis zur expliziten Freigabe durch Guido nach Prüfung oder Reparatur","Nur nicht benutzen wenn Guido dabei ist"], correct:2, expl:"Gesperrte Maschine ist gesperrt. Keine Ausnahmen, kein 'nur kurz'. Freigabe ausschließlich durch Guido nach Prüfung oder Reparatur. Eigenmächtiger Weiterbetrieb trotz Sperrung ist ein schwerer Sicherheitsverstoß."},
+  {cat:"Allgemein", q:"Was gilt für Fluchtwege und Notausgänge?", opts:["Kurzes Abstellen ist okay","Nur während Produktion freihalten","Immer vollständig freihalten — auch kurzes Blockieren ist verboten, im Brandfall zählen Sekunden","Nur Hauptausgang muss frei sein"], correct:2, expl:"Fluchtwege müssen zu 100% der Zeit vollständig frei sein. Im Brandfall zählen Sekunden. Kein Material, kein Werkzeug, kein 'nur kurz'. Gilt für jeden Notausgang und jeden Fluchtweg im Betrieb. (ASR A2.3)"},
+  {cat:"Allgemein", q:"Warum darf ein Fahrzeug nicht in einer geschlossenen Garage oder einem Keller laufen?", opts:["Nur bei alten Fahrzeugen relevant","Abgase enthalten Kohlenmonoxid — geruchlos, farblos, schnell tödliche Konzentrationen in geschlossenen Räumen","Nur Dieselfahrzeuge","Nur wenn Raum ganz klein ist"], correct:1, expl:"Kohlenmonoxid (CO) aus Verbrennungsmotoren ist geruch- und farblos, schwerer als Luft. In geschlossenen Räumen baut sich CO schnell auf tödliche Konzentrationen auf — ohne jede Vorwarnung. Gilt für alle Antriebsarten."}
+];
+
+var currentName = '';
+var sessionQuestions = [];
+var answers = {};
+var sigCanvas, sigCtx, drawing = false;
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function setProgress(step) {
+  document.getElementById('prog').style.width = ((step / 4) * 100) + '%';
+}
+
+function startApp() {
+  var sel = document.getElementById('ma-select').value;
+  var custom = document.getElementById('ma-custom').value.trim();
+  currentName = custom || sel;
+  if (!currentName) { alert('Bitte Namen eingeben oder auswählen.'); return; }
+  showStep('step-info');
+  setProgress(1);
+}
+
+function goQuiz() {
+  // Alle 40 Fragen, Reihenfolge gemischt, Antworten je Frage gemischt
+  sessionQuestions = shuffle(ALL_QUESTIONS);
+  buildQuiz();
+  showStep('step-quiz');
+  setProgress(2);
+}
+
+function buildQuiz() {
+  var c = document.getElementById('quiz-container');
+  c.innerHTML = '';
+  answers = {};
+  for (var i = 0; i < sessionQuestions.length; i++) {
+    (function(qi) {
+      var q = sessionQuestions[qi];
+      var shuffledOpts = shuffle(q.opts.map(function(o, j) { return { text: o, origIdx: j }; }));
+      var newCorrect = 0;
+      for (var k = 0; k < shuffledOpts.length; k++) {
+        if (shuffledOpts[k].origIdx === q.correct) { newCorrect = k; break; }
+      }
+      var div = document.createElement('div');
+      div.className = 'q-block';
+      var optsHtml = '';
+      for (var j = 0; j < shuffledOpts.length; j++) {
+        optsHtml += '<div class="option" id="opt-' + qi + '-' + j + '" onclick="selectOpt(' + qi + ',' + j + ',' + newCorrect + ')">'
+          + '<div class="opt-dot" id="dot-' + qi + '-' + j + '"></div>'
+          + '<span>' + shuffledOpts[j].text + '</span></div>';
+      }
+      div.innerHTML = '<div class="q-counter">Frage ' + (qi + 1) + ' von ' + sessionQuestions.length + ' &middot; ' + q.cat + '</div>'
+        + '<div class="q-text">' + q.q + '</div>'
+        + optsHtml
+        + '<div id="fb-' + qi + '" class="fb" style="display:none"></div>';
+      c.appendChild(div);
+    })(i);
+  }
+}
+
+function selectOpt(qi, oi, correctIdx) {
+  if (answers[qi] !== undefined) return;
+  answers[qi] = (oi === correctIdx) ? 1 : 0;
+  var correct = answers[qi] === 1;
+  document.getElementById('opt-' + qi + '-' + oi).className = 'option ' + (correct ? 'sel-ok' : 'sel-nok');
+  document.getElementById('dot-' + qi + '-' + oi).innerHTML = correct ? '&#10003;' : '&#10007;';
+  if (!correct) {
+    document.getElementById('opt-' + qi + '-' + correctIdx).className = 'option show-ok';
+    document.getElementById('dot-' + qi + '-' + correctIdx).innerHTML = '&#10003;';
+  }
+  var fb = document.getElementById('fb-' + qi);
+  fb.style.display = 'block';
+  fb.className = 'fb ' + (correct ? 'ok' : 'nok');
+  fb.textContent = (correct ? 'Richtig – ' : 'Falsch – ') + sessionQuestions[qi].expl;
+  if (Object.keys(answers).length === sessionQuestions.length) {
+    var btn = document.getElementById('quiz-next-btn');
+    btn.style.display = 'block';
+    setTimeout(function() { btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 200);
+  }
+}
+
+function finishQuiz() {
+  var correct = 0;
+  for (var qi in answers) { if (answers[qi] === 1) correct++; }
+  var pct = Math.round((correct / sessionQuestions.length) * 100);
+  var passed = pct >= 75;
+  document.getElementById('confirm-name').textContent = currentName;
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  var timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('confirm-date').textContent = dateStr + ', ' + timeStr + ' Uhr';
+  document.getElementById('score-display').innerHTML =
+    '<div class="score-num ' + (passed ? 'p' : 'f') + '">' + pct + '%</div>'
+    + '<div class="score-sub">' + correct + ' von ' + sessionQuestions.length + ' Fragen richtig</div>'
+    + '<span class="badge ' + (passed ? 'bp' : 'bf') + '">' + (passed ? 'Bestanden' : 'Nicht bestanden – Ruecksprache mit Guido') + '</span>';
+  showStep('step-sign');
+  setProgress(3);
+  initSig();
+}
+
+
+function initSig() {
+  sigCanvas = document.getElementById('sig-canvas');
+  sigCtx = sigCanvas.getContext('2d');
+  // On iOS, offsetWidth may not reflect actual rendered size — use getBoundingClientRect
+  var rect = sigCanvas.getBoundingClientRect();
+  sigCanvas.width = Math.round(rect.width * (window.devicePixelRatio || 1));
+  sigCanvas.height = Math.round(rect.height * (window.devicePixelRatio || 1));
+  sigCtx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+  sigCtx.strokeStyle = '#1F4E79';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+
+  function getPos(e) {
+    var r = sigCanvas.getBoundingClientRect();
+    var src = e.touches ? e.touches[0] : e;
+    return {
+      x: src.clientX - r.left,
+      y: src.clientY - r.top
+    };
+  }
+
+  sigCanvas.addEventListener('mousedown', function(e) {
+    drawing = true; sigCtx.beginPath();
+    var p = getPos(e); sigCtx.moveTo(p.x, p.y);
+  });
+  sigCanvas.addEventListener('mousemove', function(e) {
+    if (!drawing) return;
+    var p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke();
+  });
+  sigCanvas.addEventListener('mouseup', function() { drawing = false; });
+  sigCanvas.addEventListener('mouseleave', function() { drawing = false; });
+  sigCanvas.addEventListener('touchstart', function(e) {
+    e.preventDefault(); e.stopPropagation();
+    drawing = true; sigCtx.beginPath();
+    var p = getPos(e); sigCtx.moveTo(p.x, p.y);
+  }, { passive: false });
+  sigCanvas.addEventListener('touchmove', function(e) {
+    e.preventDefault(); e.stopPropagation();
+    if (!drawing) return;
+    var p = getPos(e); sigCtx.lineTo(p.x, p.y); sigCtx.stroke();
+  }, { passive: false });
+  sigCanvas.addEventListener('touchend', function(e) {
+    e.preventDefault(); drawing = false;
+  }, { passive: false });
+  sigCanvas.addEventListener('touchcancel', function() { drawing = false; });
+}
+
+function clearSig() {
+  var rect = sigCanvas.getBoundingClientRect();
+  sigCtx.clearRect(0, 0, rect.width, rect.height);
+}
+
+function isSignatureEmpty() {
+  var d = sigCtx.getImageData(0, 0, sigCanvas.width, sigCanvas.height).data;
+  for (var i = 3; i < d.length; i += 4) { if (d[i] > 10) return false; }
+  return true;
+}
+
+
+function generateReport() {
+  if (isSignatureEmpty()) { alert('Bitte zuerst unterschreiben.'); return; }
+  var correct = 0;
+  var wrongItems = [];
+  for (var qi in answers) {
+    if (answers[qi] === 1) { correct++; }
+    else { wrongItems.push('  F' + (parseInt(qi)+1) + ' [' + sessionQuestions[qi].cat + ']: ' + sessionQuestions[qi].q.substring(0,60) + '...'); }
+  }
+  var pct = Math.round((correct / sessionQuestions.length) * 100);
+  var passed = pct >= 75;
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  var timeStr = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  var report = 'SICHERHEITSUNTERWEISUNG - MOEBELBAU ROTH\n'
+    + '========================================\n'
+    + 'Mitarbeiter:  ' + currentName + '\n'
+    + 'Datum:        ' + dateStr + ', ' + timeStr + ' Uhr\n'
+    + 'Unterweisung: Jaehrliche Sicherheitsunterweisung\n'
+    + 'Grundlage:    DGUV Regel 109-606\n'
+    + 'Fragen:       ' + sessionQuestions.length + ' Pflichtfragen (alle)\n'
+    + '========================================\n'
+    + 'ERGEBNIS:  ' + pct + '% (' + correct + '/' + sessionQuestions.length + ' richtig)\n'
+    + 'Status:    ' + (passed ? 'BESTANDEN' : 'NICHT BESTANDEN');
+  if (wrongItems.length > 0) {
+    report += '\n\nFehler bei (' + wrongItems.length + ' Fragen):\n' + wrongItems.join('\n');
+  }
+  if (!passed) { report += '\n\nRuecksprache mit Guido erforderlich – Nachschulung.'; }
+  report += '\n========================================\n'
+    + 'Unterschrift: digital geleistet am ' + dateStr + '\n'
+    + 'Bestaetigung: Inhalte gelesen, verstanden, quittiert.\n'
+    + '========================================\n'
+    + 'Moebelbau Roth - Inselstrasse 1 - 88074 Meckenbeuren\n'
+    + 'Verantwortlich: Guido Roth';
+  document.getElementById('report-text').textContent = report;
+  showStep('step-report');
+  setProgress(4);
+}
+
+
+function copyReport() {
+  var txt = document.getElementById('report-text').textContent;
+  // iOS Safari: clipboard.writeText works only in user gesture context
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function() {
+      showCopySuccess();
+    }).catch(function() { iosFallbackCopy(txt); });
+  } else {
+    iosFallbackCopy(txt);
+  }
+}
+
+function iosFallbackCopy(txt) {
+  var ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.style.cssText = 'position:fixed;left:0;top:0;opacity:0;width:1px;height:1px;font-size:16px';
+  document.body.appendChild(ta);
+  ta.focus();
+  // iOS requires a range selection
+  var range = document.createRange();
+  range.selectNodeContents(ta);
+  var sel = window.getSelection();
+  if (sel) { sel.removeAllRanges(); sel.addRange(range); }
+  ta.setSelectionRange(0, 999999);
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  if (ok) { showCopySuccess(); }
+  else { alert('Bitte Text im grauen Feld antippen, gesamten Text markieren und kopieren.'); }
+}
+
+function showCopySuccess() {
+  var btn = document.querySelector('.btn-p');
+  var orig = btn.textContent;
+  btn.textContent = 'Kopiert ✓';
+  btn.style.background = '#2E7D32';
+  setTimeout(function() { btn.textContent = orig; btn.style.background = '#1F4E79'; }, 2000);
+}
+
+function openWhatsApp() {
+  window.open('https://wa.me/?text=' + encodeURIComponent(document.getElementById('report-text').textContent), '_blank');
+}
+
+function resetApp() {
+  answers = {}; currentName = ''; sessionQuestions = [];
+  document.getElementById('ma-select').value = '';
+  document.getElementById('ma-custom').value = '';
+  showStep('step-name'); setProgress(0);
+}
+
+function showStep(id) {
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
